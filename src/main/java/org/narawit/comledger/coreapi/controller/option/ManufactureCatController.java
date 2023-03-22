@@ -32,7 +32,7 @@ public class ManufactureCatController {
 		return ControllerHelper.getResponseEntity(service.findAll(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id]")
+	@GetMapping("/{id}")
 	public ResponseEntity<BaseResponse<ManufactureCatContract>> getById(@PathVariable Integer id){
 		return ControllerHelper.getResponseEntity(service.findById(id), HttpStatus.OK);
 	}

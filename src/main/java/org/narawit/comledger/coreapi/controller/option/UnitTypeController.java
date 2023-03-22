@@ -32,7 +32,7 @@ public class UnitTypeController {
 		return ControllerHelper.getResponseEntity(service.findAll(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id]")
+	@GetMapping("/{id}")
 	public ResponseEntity<BaseResponse<UnitTypeContract>> getById(@PathVariable Integer id){
 		return ControllerHelper.getResponseEntity(service.findById(id), HttpStatus.OK);
 	}

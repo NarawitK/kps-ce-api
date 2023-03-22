@@ -47,7 +47,7 @@ public class CpuController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<CpuContract>> edit(@PathVariable Long id, @RequestBody CpuRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);

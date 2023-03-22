@@ -47,7 +47,7 @@ public class NetworkConnectorTypeController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<NetworkConnectorTypeContract>> edit(@PathVariable Integer id, @RequestBody NetworkConnectorTypeRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);

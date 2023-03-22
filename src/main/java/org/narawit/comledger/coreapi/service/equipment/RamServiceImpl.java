@@ -41,7 +41,7 @@ public class RamServiceImpl implements RamService {
 	@Override
 	@Transactional
 	public RamContract add(RamRequest req) throws ResponseStatusException {
-		if(!repo.existByModel(req.model())) {
+		if(!repo.existsByModel(req.model())) {
 			return persistToDb(req);			
 		}
 		else {

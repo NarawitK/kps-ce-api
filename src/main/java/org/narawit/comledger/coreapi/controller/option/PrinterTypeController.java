@@ -46,7 +46,7 @@ public class PrinterTypeController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<PrinterTypeContract>> edit(@PathVariable Integer id, @RequestBody PrinterTypeRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);

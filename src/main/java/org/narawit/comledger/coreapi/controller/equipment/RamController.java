@@ -47,7 +47,7 @@ public class RamController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<RamContract>> edit(@PathVariable Long id, @RequestBody RamRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);

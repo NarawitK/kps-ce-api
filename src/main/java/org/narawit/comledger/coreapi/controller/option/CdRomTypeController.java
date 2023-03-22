@@ -46,7 +46,7 @@ public class CdRomTypeController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<CdromTypeContract>> edit(@PathVariable Integer id, @RequestBody CdromTypeRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);

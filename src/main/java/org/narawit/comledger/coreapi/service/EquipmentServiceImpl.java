@@ -48,7 +48,7 @@ public class EquipmentServiceImpl implements EquipmentService {
 	@Override
 	@Transactional
 	public EquipmentContract add(EquipmentRequest entity) throws ResponseStatusException {
-		if(!repo.existByName(entity.name())) {
+		if(!repo.existsByName(entity.name())) {
 			Equipment persistDept = new Equipment(entity);
 			persistDept = repo.save(persistDept);
 			return new EquipmentContract(persistDept);			

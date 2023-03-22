@@ -47,7 +47,7 @@ public class LaptopController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<LaptopContract>> edit(@PathVariable Long id, @RequestBody LaptopRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);

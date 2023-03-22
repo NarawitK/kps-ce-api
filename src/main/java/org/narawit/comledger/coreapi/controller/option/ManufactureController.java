@@ -46,7 +46,7 @@ public class ManufactureController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<ManufactureContract>> edit(@PathVariable Integer id, @RequestBody ManufactureRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);

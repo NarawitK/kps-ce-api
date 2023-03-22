@@ -47,7 +47,7 @@ public class ScannerController {
 		}
 	}
 	
-	@PutMapping("/edit/[id}")
+	@PutMapping("/edit/{id}")
 	public ResponseEntity<BaseResponse<ScannerContract>> edit(@PathVariable Long id, @RequestBody ScannerRequest req){
 		try {
 			return ControllerHelper.getResponseEntity(svc.edit(id, req), HttpStatus.NO_CONTENT);
