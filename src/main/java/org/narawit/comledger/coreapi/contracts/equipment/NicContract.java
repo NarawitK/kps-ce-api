@@ -1,7 +1,7 @@
 package org.narawit.comledger.coreapi.contracts.equipment;
 
 import org.narawit.comledger.coreapi.domain.Equipment;
-import org.narawit.comledger.coreapi.domain.equipments.Nic;
+import org.narawit.comledger.coreapi.domain.equipment.Nic;
 import org.narawit.comledger.coreapi.domain.option.Manufacture;
 import org.narawit.comledger.coreapi.domain.option.NetworkConnectionType;
 import org.narawit.comledger.coreapi.domain.option.NetworkConnectorType;

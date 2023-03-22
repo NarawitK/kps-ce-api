@@ -1,6 +1,6 @@
 package org.narawit.comledger.coreapi.contracts.equipment;
 
-import org.narawit.comledger.coreapi.domain.equipments.Cpu;
+import org.narawit.comledger.coreapi.domain.equipment.Cpu;
 import org.narawit.comledger.coreapi.domain.option.Manufacture;
 import org.narawit.comledger.coreapi.domain.option.Unit;
 

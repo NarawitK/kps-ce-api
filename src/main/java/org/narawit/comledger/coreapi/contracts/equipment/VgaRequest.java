@@ -12,4 +12,4 @@ public record VgaRequest(
 		@NotBlank
 		Double memory, 
 		@NotBlank
-		Integer memoryUnit) {}
+		Integer memoryUnitId) {}

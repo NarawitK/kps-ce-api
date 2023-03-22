@@ -2,16 +2,18 @@ package org.narawit.comledger.coreapi.domain.option;
 
 import java.util.Set;
 
-import org.narawit.comledger.coreapi.domain.equipments.Laptop;
-import org.narawit.comledger.coreapi.domain.equipments.Nic;
-import org.narawit.comledger.coreapi.domain.equipments.Pc;
-import org.narawit.comledger.coreapi.domain.equipments.Printer;
-import org.narawit.comledger.coreapi.domain.equipments.Scanner;
-import org.narawit.comledger.coreapi.domain.equipments.Ups;
-import org.narawit.comledger.coreapi.domain.equipments.Vga;
+import org.narawit.comledger.coreapi.contract.option.ManufactureRequest;
+import org.narawit.comledger.coreapi.domain.equipment.Laptop;
+import org.narawit.comledger.coreapi.domain.equipment.Nic;
+import org.narawit.comledger.coreapi.domain.equipment.Pc;
+import org.narawit.comledger.coreapi.domain.equipment.Printer;
+import org.narawit.comledger.coreapi.domain.equipment.Scanner;
+import org.narawit.comledger.coreapi.domain.equipment.Ups;
+import org.narawit.comledger.coreapi.domain.equipment.Vga;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,45 +34,51 @@ public class Manufacture {
 	@Column(length = 30, nullable = false)
 	private String name;
 	
-	// Reference Keys Declaration
-	// LAPTOP
-	@OneToMany(mappedBy = "manufacture")
-	private Set<Laptop> laptops;
-	@OneToMany(mappedBy = "cpuManufacture")
-	private Set<Laptop> laptopsCpuManufacture;
-	@OneToMany(mappedBy = "ramManufacture")
-	private Set<Laptop> laptopsRamManufacture;
-	// PC
-	@OneToMany(mappedBy = "mbManufacture")
-	private Set<Pc> pcsMainboard;
-	@OneToMany(mappedBy = "cpuManufacture")
-	private Set<Pc> pcsCpuManufacture;
-	@OneToMany(mappedBy = "ramManufacture")
-	private Set<Pc> pcsRamManufacture;
-	@OneToMany(mappedBy = "psuManufacture")
-	private Set<Pc> psuManufacture;
-	// NICS
-	@OneToMany(mappedBy = "manufacture")
-	private Set<Nic> nics;
-	// PRINTER
-	@OneToMany(mappedBy = "manufacture")
-	private Set<Printer> printers;
-	// SCANNER
-	@OneToMany(mappedBy = "manufacture")
-	private Set<Scanner> scanners;
-	// UPS
-	@OneToMany(mappedBy = "manufacture")
-	private Set<Ups> upses;
-	
-	@OneToMany(mappedBy = "manufacture")
-	private Set<Vga> vgas;
-	
-	// Foreign Key Declaration
+	// Foreign Key.
 	@ManyToOne
 	@JoinColumn(name = "manufacture_category_id", nullable = true)
 	private ManufactureCategory manufactureCategory;
 	
+	// Key referenced from other tables.
+	// LAPTOP
+	@OneToMany(mappedBy = "manufacture", fetch = FetchType.LAZY)
+	private Set<Laptop> laptops;
+	// PC
+	@OneToMany(mappedBy = "mbManufacture", fetch = FetchType.LAZY)
+	private Set<Pc> pcsMainboard;
+	@OneToMany(mappedBy = "psuManufacture", fetch = FetchType.LAZY)
+	private Set<Pc> psuManufacture;
+	// NICS
+	@OneToMany(mappedBy = "manufacture", fetch = FetchType.LAZY)
+	private Set<Nic> nics;
+	// PRINTER
+	@OneToMany(mappedBy = "manufacture", fetch = FetchType.LAZY)
+	private Set<Printer> printers;
+	// SCANNER
+	@OneToMany(mappedBy = "manufacture", fetch = FetchType.LAZY)
+	private Set<Scanner> scanners;
+	// UPS
+	@OneToMany(mappedBy = "manufacture", fetch = FetchType.LAZY)
+	private Set<Ups> upses;
+	
+	@OneToMany(mappedBy = "manufacture", fetch = FetchType.LAZY)
+	private Set<Vga> vgas;
+	
+	
 	public Manufacture() {}
+	
+	public Manufacture(Integer id) {
+		this.id = id;
+	}
+	
+	public Manufacture(ManufactureRequest req) {
+		this.name = req.name();
+	}
+	
+	public Manufacture(Integer id, ManufactureRequest req) {
+		this.id = id;
+		this.name = req.name();
+	}
 
 	public Integer getId() {
 		return id;
@@ -96,22 +104,6 @@ public class Manufacture {
 		this.laptops = laptops;
 	}
 
-	public Set<Laptop> getLaptopsCpuManufacture() {
-		return laptopsCpuManufacture;
-	}
-
-	public void setLaptopsCpuManufacture(Set<Laptop> laptopsCpuManufacture) {
-		this.laptopsCpuManufacture = laptopsCpuManufacture;
-	}
-
-	public Set<Laptop> getLaptopsRamManufacture() {
-		return laptopsRamManufacture;
-	}
-
-	public void setLaptopsRamManufacture(Set<Laptop> laptopsRamManufacture) {
-		this.laptopsRamManufacture = laptopsRamManufacture;
-	}
-
 	public Set<Pc> getPcsMainboard() {
 		return pcsMainboard;
 	}
@@ -119,23 +111,7 @@ public class Manufacture {
 	public void setPcsMainboard(Set<Pc> pcsMainboard) {
 		this.pcsMainboard = pcsMainboard;
 	}
-
-	public Set<Pc> getPcsCpuManufacture() {
-		return pcsCpuManufacture;
-	}
-
-	public void setPcsCpuManufacture(Set<Pc> pcsCpuManufacture) {
-		this.pcsCpuManufacture = pcsCpuManufacture;
-	}
-
-	public Set<Pc> getPcsRamManufacture() {
-		return pcsRamManufacture;
-	}
-
-	public void setPcsRamManufacture(Set<Pc> pcsRamManufacture) {
-		this.pcsRamManufacture = pcsRamManufacture;
-	}
-
+	
 	public Set<Nic> getNics() {
 		return nics;
 	}

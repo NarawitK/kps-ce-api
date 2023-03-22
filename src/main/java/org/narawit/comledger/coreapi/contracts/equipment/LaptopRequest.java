@@ -9,5 +9,4 @@ public record LaptopRequest(
 		String pointerDevice,
 		String keyboard,
 		Integer cdRomTypeId) {
-
 }

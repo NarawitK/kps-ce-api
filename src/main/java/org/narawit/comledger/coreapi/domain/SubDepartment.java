@@ -2,6 +2,8 @@ package org.narawit.comledger.coreapi.domain;
 
 import java.util.Set;
 
+import org.narawit.comledger.coreapi.contract.SubDepartmentRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,21 +24,34 @@ public class SubDepartment {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sub_dept_gen")
-	// @SequenceGenerator(name = "sub_dept_gen", sequenceName = "subdept_seq", allocationSize = 1)
 	private Integer id;
-	// Foreign Key Declarations
-	@ManyToOne
-	@JoinColumn(name = "dept_id", nullable = false)
-	private Department department;
-	@OneToMany(mappedBy = "subDepartment")
-	private Set<EquipmentLocation> equipmentLocations;
 	@Column(length = 150, nullable = false)
 	private String name;
 	@Column(name = "active", nullable = false)
 	private boolean active;
+	
+	// Foreign Key Declarations
+	@ManyToOne
+	@JoinColumn(name = "dept_id", nullable = false)
+	private Department department;
+	
+	@OneToMany(mappedBy = "subDepartment")
+	private Set<EquipmentLocation> equipmentLocations;
 
 	public SubDepartment() {}
+	
+	public SubDepartment(SubDepartmentRequest req) {
+		this.name = req.name();
+		this.department.setId(req.deptId());
+		this.active = req.active();
+	}
+	
+	public SubDepartment(Integer id, SubDepartmentRequest req) {
+		this.id = id;
+		this.name = req.name();
+		this.department.setId(req.deptId());
+		this.active = req.active();
+	}
 
 	public Integer getId() {
 		return id;

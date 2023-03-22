@@ -3,7 +3,7 @@ package org.narawit.comledger.coreapi.contracts.equipment;
 import java.time.ZonedDateTime;
 
 import org.narawit.comledger.coreapi.domain.Equipment;
-import org.narawit.comledger.coreapi.domain.equipments.Printer;
+import org.narawit.comledger.coreapi.domain.equipment.Printer;
 import org.narawit.comledger.coreapi.domain.option.Manufacture;
 import org.narawit.comledger.coreapi.domain.option.PrinterType;
 

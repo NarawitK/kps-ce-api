@@ -18,17 +18,19 @@ public class EquipmentType {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equip_type_id_generator")
-	// @SequenceGenerator(name = "equip_type_id_generator", sequenceName = "equip_type_id_seq", allocationSize = 1)
-	private long id;
+	private Long id;
 	@Column(length = 50, nullable = false)
 	private String name;
 	@OneToMany(mappedBy = "equipmentType")
 	private Set<Equipment> equipments;
 	
 	public EquipmentType() {}
-	public EquipmentType(long id, String name) {
+	public EquipmentType(Long id, String name) {
 		this.id = id;
+		this.name = name;
+	}
+	public EquipmentType(String name) {
+		this.id = null;
 		this.name = name;
 	}
 	
@@ -44,7 +46,7 @@ public class EquipmentType {
 		this.id = id;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	public String getName() {

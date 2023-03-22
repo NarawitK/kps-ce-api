@@ -2,11 +2,11 @@ package org.narawit.comledger.coreapi.domain.option;
 
 import java.util.Set;
 
-import org.narawit.comledger.coreapi.domain.equipments.Laptop;
-import org.narawit.comledger.coreapi.domain.equipments.Nic;
-import org.narawit.comledger.coreapi.domain.equipments.Pc;
-import org.narawit.comledger.coreapi.domain.equipments.Ups;
-import org.narawit.comledger.coreapi.domain.equipments.Vga;
+import org.narawit.comledger.coreapi.contract.option.UnitRequest;
+import org.narawit.comledger.coreapi.domain.equipment.Nic;
+import org.narawit.comledger.coreapi.domain.equipment.Pc;
+import org.narawit.comledger.coreapi.domain.equipment.Ups;
+import org.narawit.comledger.coreapi.domain.equipment.Vga;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,26 +28,14 @@ public class Unit {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_id_gen")
-	// @SequenceGenerator(name = "unit_id_gen", sequenceName = "unit_id_seq", allocationSize = 1)
 	private Integer id;
 	@Column(length = 10, nullable = false, unique = true)
 	private String unit;
 
 	@ManyToOne
 	@JoinColumn(name = "type_id", nullable = true)
-	private TypeOfUnit unitType;
+	private UnitType unitType;
 	
-	// Laptop Entity
-	@OneToMany(mappedBy = "cpuSpeedUnit")
-	private Set<Laptop> laptopCpuSpeedUnits;
-	@OneToMany(mappedBy = "ramCapacityUnit")
-	private Set<Laptop> laptopRamCapacityUnits;
-	// PC Entity
-	@OneToMany(mappedBy = "cpuSpeedUnit")
-	private Set<Pc> pcCpuSpeedUnits;
-	@OneToMany(mappedBy = "ramCapacityUnit")
-	private Set<Pc> pcRamSpeedUnits;
 	@OneToMany(mappedBy = "psuUnit")
 	private Set<Pc> pcPsuUnits;
 	// NIC Entity
@@ -61,6 +49,17 @@ public class Unit {
 	private Set<Vga> vgaMemoryUnits;
 	
 	public Unit() {}
+	public Unit(int id) {
+		this.id = id;
+	}
+	public Unit(int id, UnitRequest req) {
+		this.id = id;
+		this.unit = req.unit();
+	}
+	public Unit(UnitRequest req) {
+		this.unit = req.unit();
+		this.unitType = new UnitType(req.unitTypeId());
+	}
 
 	public Integer getId() {
 		return id;
@@ -78,46 +77,14 @@ public class Unit {
 		this.unit = unit;
 	}
 
-	public TypeOfUnit getUnitType() {
+	public UnitType getUnitType() {
 		return unitType;
 	}
 
-	public void setUnitType(TypeOfUnit unitType) {
+	public void setUnitType(UnitType unitType) {
 		this.unitType = unitType;
 	}
-
-	public Set<Laptop> getLaptopCpuSpeedUnits() {
-		return laptopCpuSpeedUnits;
-	}
-
-	public void setLaptopCpuSpeedUnits(Set<Laptop> laptopCpuSpeedUnits) {
-		this.laptopCpuSpeedUnits = laptopCpuSpeedUnits;
-	}
-
-	public Set<Laptop> getLaptopRamCapacityUnits() {
-		return laptopRamCapacityUnits;
-	}
-
-	public void setLaptopRamCapacityUnits(Set<Laptop> laptopRamCapacityUnits) {
-		this.laptopRamCapacityUnits = laptopRamCapacityUnits;
-	}
-
-	public Set<Pc> getPcCpuSpeedUnits() {
-		return pcCpuSpeedUnits;
-	}
-
-	public void setPcCpuSpeedUnits(Set<Pc> pcCpuSpeedUnits) {
-		this.pcCpuSpeedUnits = pcCpuSpeedUnits;
-	}
-
-	public Set<Pc> getPcRamSpeedUnits() {
-		return pcRamSpeedUnits;
-	}
-
-	public void setPcRamSpeedUnits(Set<Pc> pcRamSpeedUnits) {
-		this.pcRamSpeedUnits = pcRamSpeedUnits;
-	}
-
+	
 	public Set<Pc> getPcPsuUnits() {
 		return pcPsuUnits;
 	}

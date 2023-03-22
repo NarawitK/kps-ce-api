@@ -2,6 +2,9 @@ package org.narawit.comledger.coreapi.domain;
 
 import java.time.ZonedDateTime;
 
+import org.narawit.comledger.coreapi.contract.MaintenanceRequest;
+import org.springframework.data.annotation.CreatedDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,19 +27,14 @@ public class MaintenanceHistory {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "history_id_gen")
-	// @SequenceGenerator(name = "history_id_gen", sequenceName = "history_id_seq", allocationSize = 1)
 	private Long id;
-	// Foreign Key Declaration
-	@ManyToOne
-	@JoinColumn(name = "equipment_id", nullable = false)
-	private Equipment equipment;
 	@Column(length = 500, nullable = false)
 	private String detail;
 	@Column(name = "created_at", 
 			columnDefinition = "timestamp with time zone DEFAULT now()", 
 			nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
 	private ZonedDateTime createdAt;
 	@Column(columnDefinition = "boolean DEFAULT false", 
 			nullable = false)
@@ -44,11 +42,31 @@ public class MaintenanceHistory {
 	@Column(name = "done_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	private ZonedDateTime doneDate;
+	
+	// Foreign Key from other tables
+	@ManyToOne
+	@JoinColumn(name = "equipment_id", nullable = false)
+	private Equipment equipment;
 	@ManyToOne
 	@JoinColumn(name = "created_by", nullable = false)
 	private User createdByUser;
 	
 	public MaintenanceHistory() {}
+	
+	public MaintenanceHistory(MaintenanceRequest req) {
+		this.detail = req.detail();
+		this.done = req.done();
+		this.doneDate = req.doneDate();
+	}
+	
+	public MaintenanceHistory(Long id, MaintenanceRequest req) {
+		this.id = id;
+		this.detail = req.detail();
+		this.done = req.done();
+		this.doneDate = req.doneDate();
+		this.equipment = new Equipment(req.equipmentId());
+		this.createdByUser = new User(req.userId());
+	}
 
 	public long getId() {
 		return id;
@@ -105,5 +123,4 @@ public class MaintenanceHistory {
 	public void setCreatedByUser(User createdByUser) {
 		this.createdByUser = createdByUser;
 	}
-
 }

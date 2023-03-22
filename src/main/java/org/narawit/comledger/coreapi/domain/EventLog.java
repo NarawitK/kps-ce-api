@@ -2,6 +2,8 @@ package org.narawit.comledger.coreapi.domain;
 
 import java.time.ZonedDateTime;
 
+import org.narawit.comledger.coreapi.contract.EventLogRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,9 +24,7 @@ public class EventLog {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "eventlog_id_generator")
-	// @SequenceGenerator(name = "eventlog_id_generator", sequenceName = "ev_log_id_seq", allocationSize = 1)
-	private long id;
+	private Long id;
 	@Column(name = "log_date", 
 			columnDefinition = "timestamp with time zone DEFAULT NOW()", 
 			nullable = false)
@@ -36,20 +36,25 @@ public class EventLog {
 	private String header;
 	private String detail;
 	
-	public EventLog(long id, ZonedDateTime logDate, String operation, String header, String detail) {
-		super();
-		this.id = id;
-		this.logDate = logDate;
-		this.operation = operation;
-		this.header = header;
-		this.detail = detail;
+	public EventLog() {}
+	
+	public EventLog(Long identity, EventLogRequest req) {
+		this(req);
+		this.id = identity;
+	}
+	
+	public EventLog(EventLogRequest req) {
+		this.logDate = req.logdate();
+		this.operation = req.operation();
+		this.header = req.header();
+		this.detail = req.detail();
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

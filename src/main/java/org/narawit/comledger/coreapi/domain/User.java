@@ -3,6 +3,8 @@ package org.narawit.comledger.coreapi.domain;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
+import org.narawit.comledger.coreapi.contract.UserRequest;
+
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -10,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
@@ -31,8 +34,6 @@ uniqueConstraints = {
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
-	// @SequenceGenerator(name = "user_id_generator", sequenceName = "uid_seq", allocationSize = 1)
 	@Column(nullable = false)
 	private Long id;
 	@ManyToOne
@@ -54,10 +55,35 @@ public class User {
 	@Column(name = "active", columnDefinition = "boolean DEFAULT true", nullable = false)
 	private boolean active;
 	
-	@OneToMany(mappedBy = "createdByUser")
+	@OneToMany(mappedBy = "createdByUser", fetch = FetchType.LAZY)
 	private Set<MaintenanceHistory> maintenanceHistories;
 	
 	public User() {}
+	
+	public User(Long id) {
+		this.id = id;
+	}
+	
+	public User(UserRequest req) {
+		this.initial = new PersonInitial(req.initialId());
+		this.firstname = req.firstname();
+		this.lastname = req.lastname();
+		this.email = req.email();
+		this.username = req.username();
+		this.password = req.password();
+		this.active = req.active();
+	}
+	
+	public User(Long id, UserRequest req) {
+		this.id = id;
+		this.initial = new PersonInitial(req.initialId());
+		this.firstname = req.firstname();
+		this.lastname = req.lastname();
+		this.email = req.email();
+		this.username = req.username();
+		this.password = req.password();
+		this.active = req.active();
+	}
 
 	public Long getId() {
 		return id;

@@ -2,10 +2,12 @@ package org.narawit.comledger.coreapi.domain.option;
 
 import java.util.Set;
 
-import org.narawit.comledger.coreapi.domain.equipments.Nic;
+import org.narawit.comledger.coreapi.contract.option.NetworkConnectionTypeRequest;
+import org.narawit.comledger.coreapi.domain.equipment.Nic;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,16 +21,27 @@ public class NetworkConnectionType {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "netcon_id_gen")
-	// @SequenceGenerator(name = "netcon_id_gen", sequenceName = "netcon_id_seq", allocationSize = 1)
 	private Integer id;
 	@Column(name = "connection_type", length = 20, nullable = false)
 	private String connectionType;
 	
-	@OneToMany(mappedBy = "connectionType")
+	@OneToMany(mappedBy = "connectionType", fetch = FetchType.LAZY)
 	public Set<Nic> nics;
 	
 	public NetworkConnectionType() {}
+	
+	public NetworkConnectionType(Integer id) {
+		this.id = id;
+	}
+	
+	public NetworkConnectionType(NetworkConnectionTypeRequest req) {
+		this.connectionType = req.connectionType();
+	}
+	
+	public NetworkConnectionType(Integer id, NetworkConnectionTypeRequest req) {
+		this.id = id;
+		this.connectionType = req.connectionType();
+	}
 
 	public Integer getId() {
 		return id;

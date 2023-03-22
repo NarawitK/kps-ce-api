@@ -2,6 +2,8 @@ package org.narawit.comledger.coreapi.domain;
 
 import java.util.Set;
 
+import org.narawit.comledger.coreapi.contract.DepartmentRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,35 +22,33 @@ public class Department {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dept_id_generator")
-	// @SequenceGenerator(name = "dept_id_generator", sequenceName = "dept_id_seq", allocationSize = 1)
 	private Integer id;
 	@Column(length = 150, nullable = false)
 	private String name;
 	@Column(name = "active", columnDefinition = "boolean DEFAULT true", nullable = false)
 	private boolean active;
 	
-	// Foreign Key Declarations
+	// Foreign Key in Other Entities
 	@OneToMany(mappedBy = "department")
 	private Set<EquipmentLocation>  equipmentLocations;
 	@OneToMany(mappedBy = "department")
 	private Set<SubDepartment> subDepartments;
 	
 	public Department() {}
-	public Department(String name, boolean isActive) {
-		this.name = name;
-		this.active = isActive;
+	public Department(DepartmentRequest req) {
+		this.name = req.name();
+		this.active = req.active();
 	}
-	public Department(int id, String name, boolean isActive) {
+	public Department(Integer id, DepartmentRequest req) {
 		this.id = id;
-		this.name = name;
-		this.active = isActive;
+		this.name = req.name();
+		this.active = req.active();
 	}
 	
 	public int getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {

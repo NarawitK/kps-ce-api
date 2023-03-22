@@ -20,6 +20,4 @@ public record PcRequest(
 		Long nicId,
 		Long upsId,
 		Long vgaId
-		) {
-
-}
+		) {}

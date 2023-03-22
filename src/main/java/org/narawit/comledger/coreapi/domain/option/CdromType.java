@@ -2,10 +2,12 @@ package org.narawit.comledger.coreapi.domain.option;
 
 import java.util.Set;
 
-import org.narawit.comledger.coreapi.domain.equipments.Pc;
+import org.narawit.comledger.coreapi.contract.option.CdromTypeRequest;
+import org.narawit.comledger.coreapi.domain.equipment.Pc;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,20 +21,26 @@ public class CdromType {
 	@Id
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cdtype_id_gen")
-	//@SequenceGenerator(name = "cdtype_id_gen", sequenceName = "cdtype_id_seq", allocationSize = 1)
 	private Integer id;
 	@Column(length = 10, nullable = false)
 	private String type;
 	
-	@OneToMany(mappedBy = "cdromTypeId")
+	@OneToMany(mappedBy = "cdromType", fetch = FetchType.LAZY)
 	private Set<Pc> pcs;
 	
 	public CdromType() {}
 	
-	public CdromType(Integer id, String type) {
+	public CdromType(Integer id) {
 		this.id = id;
-		this.type = type;
+	}
+	
+	public CdromType(CdromTypeRequest req) {
+		this.type = req.type();
+	}
+	
+	public CdromType(Integer id, CdromTypeRequest req) {
+		this.id = id;
+		this.type = req.type();
 	}
 
 	public Integer getId() {

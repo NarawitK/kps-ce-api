@@ -3,7 +3,8 @@ package org.narawit.comledger.coreapi.domain;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-import org.narawit.comledger.coreapi.domain.equipments.*;
+import org.narawit.comledger.coreapi.contract.EquipmentRequest;
+import org.narawit.comledger.coreapi.domain.equipment.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -69,6 +70,34 @@ public class Equipment {
 	
 	
 	public Equipment() {}
+	
+	public Equipment(Long id) {
+		this.id = id;
+	}
+	
+	public Equipment(EquipmentRequest req) {
+		this.id = null;
+		this.name = req.name();
+		this.description = req.description();
+		this.equipmentType.setId(req.equipmentTypeId());
+		this.internalIdentifier  = req.identifier();
+		this.serialNumber  = req.serialNumber();
+		this.active = req.active();
+		this.importDate = req.importDate();
+		this.registerDate = req.registerDate();		
+	}
+	
+	public Equipment(Long id, EquipmentRequest req) {
+		this.id = id;
+		this.name = req.name();
+		this.description = req.description();
+		this.equipmentType.setId(req.equipmentTypeId());
+		this.internalIdentifier  = req.identifier();
+		this.serialNumber  = req.serialNumber();
+		this.active = req.active();
+		this.importDate = req.importDate();
+		this.registerDate = req.registerDate();		
+	}
 
 	public Long getId() {
 		return id;

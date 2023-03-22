@@ -2,10 +2,12 @@ package org.narawit.comledger.coreapi.domain.option;
 
 import java.util.Set;
 
-import org.narawit.comledger.coreapi.domain.equipments.Printer;
+import org.narawit.comledger.coreapi.contract.option.PrinterTypeRequest;
+import org.narawit.comledger.coreapi.domain.equipment.Printer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,10 +25,23 @@ public class PrinterType {
 	@Column(length = 40, nullable = false)
 	private String type;
 	
-	@OneToMany(mappedBy = "printerType")
+	@OneToMany(mappedBy = "printerType", fetch = FetchType.LAZY)
 	private Set<Printer> printers;
 	
 	public PrinterType() {}
+	
+	public PrinterType(Integer id) {
+		this.id = id;
+	}
+	
+	public PrinterType(PrinterTypeRequest req) {
+		this.type = req.type();
+	}
+	
+	public PrinterType(Integer id, PrinterTypeRequest req) {
+		this(id);
+		this.type = req.type();
+	}
 
 	public Integer getId() {
 		return id;

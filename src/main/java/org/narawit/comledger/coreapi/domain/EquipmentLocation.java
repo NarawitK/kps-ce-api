@@ -2,6 +2,8 @@ package org.narawit.comledger.coreapi.domain;
 
 import java.time.ZonedDateTime;
 
+import org.narawit.comledger.coreapi.contract.EquipmentLocationRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +43,53 @@ public class EquipmentLocation {
 	private Equipment equipment;
 
 	public EquipmentLocation() {}
-
+	
+	//Request-Based Constructor
+	public EquipmentLocation(Long id, EquipmentLocationRequest req) {
+		this.id = id;
+		this.assigned_date = req.assignedDate();
+		this.active = req.active();
+		this.lastDeactiveDate = req.lastDeactiveDate();
+		this.department = null;
+		this.subDepartment = null;
+		this.equipment = null;
+		if(req.deptId() != null) { 
+			this.department = new Department();
+			this.department.setId(req.deptId());
+		}
+		if(req.subDeptId() != null) { 
+			this.subDepartment = new SubDepartment();
+			this.subDepartment.setId(req.subDeptId());
+		}
+		if(req.equipmentId() != null) { 
+			this.equipment = new Equipment();
+			this.equipment.setId(req.equipmentId());
+		}
+	}
+	
+	//Request-Based Constructor
+	public EquipmentLocation(EquipmentLocationRequest req) {
+		this.id = null;
+		this.assigned_date = req.assignedDate();
+		this.active = req.active();
+		this.lastDeactiveDate = req.lastDeactiveDate();
+		this.department = null;
+		this.subDepartment = null;
+		this.equipment = null;
+		if(req.deptId() != null) { 
+			this.department = new Department();
+			this.department.setId(req.deptId());
+		}
+		if(req.subDeptId() != null) { 
+			this.subDepartment = new SubDepartment();
+			this.subDepartment.setId(req.subDeptId());
+		}
+		if(req.equipmentId() != null) { 
+			this.equipment = new Equipment();
+			this.equipment.setId(req.equipmentId());
+		}
+	}
+	
 	public Long getId() {
 		return id;
 	}

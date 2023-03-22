@@ -1,12 +1,12 @@
 package org.narawit.comledger.coreapi.contracts.equipment;
 
 import org.narawit.comledger.coreapi.domain.Equipment;
-import org.narawit.comledger.coreapi.domain.equipments.Cpu;
-import org.narawit.comledger.coreapi.domain.equipments.Nic;
-import org.narawit.comledger.coreapi.domain.equipments.Pc;
-import org.narawit.comledger.coreapi.domain.equipments.Ram;
-import org.narawit.comledger.coreapi.domain.equipments.Ups;
-import org.narawit.comledger.coreapi.domain.equipments.Vga;
+import org.narawit.comledger.coreapi.domain.equipment.Cpu;
+import org.narawit.comledger.coreapi.domain.equipment.Nic;
+import org.narawit.comledger.coreapi.domain.equipment.Pc;
+import org.narawit.comledger.coreapi.domain.equipment.Ram;
+import org.narawit.comledger.coreapi.domain.equipment.Ups;
+import org.narawit.comledger.coreapi.domain.equipment.Vga;
 import org.narawit.comledger.coreapi.domain.option.CdromType;
 import org.narawit.comledger.coreapi.domain.option.Manufacture;
 import org.narawit.comledger.coreapi.domain.option.Unit;
