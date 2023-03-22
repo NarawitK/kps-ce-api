@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.repo.equipment.UpsRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class UpsServiceImpl implements UpsService {
 	
 	private final UpsRepo repo;
@@ -37,6 +39,7 @@ public class UpsServiceImpl implements UpsService {
 	}
 
 	@Override
+	@Transactional
 	public UpsContract add(UpsRequest req) throws ResponseStatusException {
 		if(!repo.existsByEquipmentId(req.equipmentId())) {
 			return persistToDb(req);			
@@ -47,6 +50,7 @@ public class UpsServiceImpl implements UpsService {
 	}
 
 	@Override
+	@Transactional
 	public UpsContract edit(Long identity, UpsRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity))
 			return persistToDb(req);
@@ -55,6 +59,7 @@ public class UpsServiceImpl implements UpsService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long identity){
 		repo.deleteById(identity);
 	}

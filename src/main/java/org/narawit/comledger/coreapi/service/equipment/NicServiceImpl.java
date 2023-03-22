@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.repo.equipment.NicRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class NicServiceImpl implements NicService {
 	
 	private final NicRepo repo;
@@ -37,6 +39,7 @@ public class NicServiceImpl implements NicService {
 	}
 
 	@Override
+	@Transactional
 	public NicContract add(NicRequest req) throws ResponseStatusException {
 		if(!repo.existsByEquipmentId(req.equipmentId())) {
 			return persistToDb(req);			
@@ -47,6 +50,7 @@ public class NicServiceImpl implements NicService {
 	}
 
 	@Override
+	@Transactional
 	public NicContract edit(Long identity, NicRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity))
 			return persistToDb(req);
@@ -55,6 +59,7 @@ public class NicServiceImpl implements NicService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long identity){
 		repo.deleteById(identity);
 	}

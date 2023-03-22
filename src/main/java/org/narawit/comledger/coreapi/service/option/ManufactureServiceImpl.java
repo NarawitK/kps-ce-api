@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.repo.option.ManufactureRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class ManufactureServiceImpl implements ManufactureService{
 	
 	private final ManufactureRepo repo;
@@ -38,6 +40,7 @@ public class ManufactureServiceImpl implements ManufactureService{
 	}
 
 	@Override
+	@Transactional
 	public ManufactureContract add(ManufactureRequest req) throws ResponseStatusException {
 		if(!repo.existsByName(req.name())) {
 			Manufacture persisted = repo.save(new Manufacture(req));
@@ -49,6 +52,7 @@ public class ManufactureServiceImpl implements ManufactureService{
 	}
 
 	@Override
+	@Transactional
 	public ManufactureContract edit(Integer identity, ManufactureRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			Manufacture persisted = repo.save(new Manufacture(req));
@@ -60,6 +64,7 @@ public class ManufactureServiceImpl implements ManufactureService{
 	}
 
 	@Override
+	@Transactional
 	public void remove(Integer identity) {
 		repo.deleteById(identity);
 	}

@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.repo.equipment.PcRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class PcServiceImpl implements PcService {
 
 	private final PcRepo repo;
@@ -37,6 +39,7 @@ public class PcServiceImpl implements PcService {
 	}
 
 	@Override
+	@Transactional
 	public PcContract add(PcRequest req) throws ResponseStatusException {
 		if(!repo.existsByEquipmentId(req.equipmentId())) {
 			return this.persistToDb(null, req);			
@@ -47,6 +50,7 @@ public class PcServiceImpl implements PcService {
 	}
 
 	@Override
+	@Transactional
 	public PcContract edit(Long identity, PcRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			return persistToDb(identity, req);
@@ -57,6 +61,7 @@ public class PcServiceImpl implements PcService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long identity) {
 		repo.deleteById(identity);
 	}

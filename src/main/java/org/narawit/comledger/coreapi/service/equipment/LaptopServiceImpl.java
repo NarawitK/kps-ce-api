@@ -9,9 +9,11 @@ import org.narawit.comledger.coreapi.repo.equipment.LaptopRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class LaptopServiceImpl implements LaptopService {
 	
 	private final LaptopRepo repo;
@@ -35,6 +37,7 @@ public class LaptopServiceImpl implements LaptopService {
 	}
 
 	@Override
+	@Transactional
 	public LaptopContract add(LaptopRequest req) throws ResponseStatusException {
 		if(!repo.existsByEquipmentId(req.equipmentId())) {
 			return this.persistToDb(null, req);			
@@ -45,6 +48,7 @@ public class LaptopServiceImpl implements LaptopService {
 	}
 
 	@Override
+	@Transactional
 	public LaptopContract edit(Long identity, LaptopRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			return this.persistToDb(identity, req);
@@ -55,6 +59,7 @@ public class LaptopServiceImpl implements LaptopService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long identity){
 		repo.deleteById(identity);
 	}

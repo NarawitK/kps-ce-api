@@ -12,9 +12,11 @@ import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.narawit.comledger.coreapi.utilities.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class EventLogServiceImpl implements EventLogService {
 
 	private EventLogRepo repo;
@@ -44,6 +46,7 @@ public class EventLogServiceImpl implements EventLogService {
 	}
 
 	@Override
+	@Transactional
 	public EventLogContract add(EventLogRequest req) throws ResponseStatusException {
 		if(StringUtils.isStringNotEmpty(req.header())) {
 			return this.persistToDb(null, req);
@@ -52,6 +55,7 @@ public class EventLogServiceImpl implements EventLogService {
 	}
 
 	@Override
+	@Transactional
 	public EventLogContract edit(Long identity, EventLogRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			return this.persistToDb(identity, req);
@@ -62,6 +66,7 @@ public class EventLogServiceImpl implements EventLogService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long identity) {
 		repo.deleteById(identity);
 	}

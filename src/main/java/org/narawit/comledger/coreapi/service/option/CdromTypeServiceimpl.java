@@ -11,9 +11,11 @@ import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.narawit.comledger.coreapi.utilities.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class CdromTypeServiceimpl implements CdromTypeService {
 	
 	private CdromTypeRepo repo;
@@ -21,6 +23,7 @@ public class CdromTypeServiceimpl implements CdromTypeService {
 	public CdromTypeServiceimpl(CdromTypeRepo repo) {
 		this.repo = repo;
 	}
+	
 	@Override
 	public Iterable<CdromTypeContract> findAll() {
 		Iterable<CdromType> rs = repo.findAll();
@@ -40,6 +43,7 @@ public class CdromTypeServiceimpl implements CdromTypeService {
 	}
 
 	@Override
+	@Transactional
 	public CdromTypeContract add(CdromTypeRequest req) throws ResponseStatusException {
 		if(StringUtils.isStringNotEmpty(req.type())) {
 			if(!repo.existsByType(req.type())){
@@ -54,6 +58,7 @@ public class CdromTypeServiceimpl implements CdromTypeService {
 	}
 
 	@Override
+	@Transactional
 	public CdromTypeContract edit(Integer identity, CdromTypeRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			CdromType persisted = repo.save(new CdromType(req));
@@ -65,8 +70,8 @@ public class CdromTypeServiceimpl implements CdromTypeService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Integer identity){
 		repo.deleteById(identity);
 	}
-
 }

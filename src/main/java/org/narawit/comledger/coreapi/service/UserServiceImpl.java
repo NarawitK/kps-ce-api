@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.repo.UserRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService{
 	
 	private final UserRepo repo;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@Transactional
 	public UserContract add(UserRequest req) throws ResponseStatusException {
 		if(!repo.existsByEmail(req.email())) {
 			return persistToDb(null, req);
@@ -49,6 +52,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@Transactional
 	public UserContract edit(Long identity, UserRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			User persisted = repo.save(new User(identity, req));
@@ -58,6 +62,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long identity) {
 		repo.deleteById(identity);
 	}

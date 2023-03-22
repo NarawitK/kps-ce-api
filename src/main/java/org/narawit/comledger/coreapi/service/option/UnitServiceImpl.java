@@ -11,9 +11,11 @@ import org.narawit.comledger.coreapi.repo.option.UnitRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class UnitServiceImpl implements UnitService{
 	private final UnitRepo repo;
 	
@@ -43,6 +45,7 @@ public class UnitServiceImpl implements UnitService{
 	}
 
 	@Override
+	@Transactional
 	public UnitContract add(UnitRequest req) throws ResponseStatusException {
 		boolean isExist = repo.existsByUnitAndUnitTypeId(req.unit(), req.unitTypeId());
 		if(!isExist) {
@@ -55,6 +58,7 @@ public class UnitServiceImpl implements UnitService{
 	}
 
 	@Override
+	@Transactional
 	public UnitContract edit(Integer identity, UnitRequest req) throws ResponseStatusException {
 		boolean isExist = repo.existsById(identity);
 		if(isExist) {
@@ -67,6 +71,7 @@ public class UnitServiceImpl implements UnitService{
 	}
 
 	@Override
+	@Transactional
 	public void remove(Integer identity) {
 		repo.deleteById(identity);
 	}

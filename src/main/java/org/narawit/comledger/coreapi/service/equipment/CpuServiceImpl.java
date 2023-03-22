@@ -10,14 +10,18 @@ import org.narawit.comledger.coreapi.repo.equipment.CpuRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class CpuServiceImpl implements CpuService {
 	private final CpuRepo repo;
+	
 	public CpuServiceImpl(CpuRepo repo) {
 		this.repo = repo;
 	}
+	
 	@Override
 	public Iterable<CpuContract> findAll() {
 		Iterable<Cpu> result = repo.findAll();
@@ -26,12 +30,15 @@ public class CpuServiceImpl implements CpuService {
 		});
 		return contracts;
 	}
+	
 	@Override
 	public CpuContract findById(Long identity) {
 		Optional<Cpu> result = repo.findById(identity);
 		return result.isPresent() ? new CpuContract(result.get()) : null; 
 	}
+	
 	@Override
+	@Transactional
 	public CpuContract add(CpuRequest req) throws ResponseStatusException {
 		try {
 			return persistToDb(req);			
@@ -40,7 +47,9 @@ public class CpuServiceImpl implements CpuService {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
+	
 	@Override
+	@Transactional
 	public CpuContract edit(Long identity, CpuRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			return persistToDb(req);
@@ -49,7 +58,9 @@ public class CpuServiceImpl implements CpuService {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This CPU does not exist");
 		}
 	}
+	
 	@Override
+	@Transactional
 	public void remove(Long identity){
 		repo.deleteById(identity);
 	}

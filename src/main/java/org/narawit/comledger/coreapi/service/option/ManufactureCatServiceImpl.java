@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.repo.option.ManufactureCategoryRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class ManufactureCatServiceImpl implements ManufactureCatService {
 	
 	private final ManufactureCategoryRepo repo;
@@ -40,6 +42,7 @@ public class ManufactureCatServiceImpl implements ManufactureCatService {
 	}
 
 	@Override
+	@Transactional
 	public ManufactureCatContract add(ManufactureCatRequest req) throws ResponseStatusException {
 		boolean isExist = repo.existsByCategory(req.category());
 		if(!isExist) {
@@ -52,6 +55,7 @@ public class ManufactureCatServiceImpl implements ManufactureCatService {
 	}
 
 	@Override
+	@Transactional
 	public ManufactureCatContract edit(Integer identity, ManufactureCatRequest req) throws ResponseStatusException {
 		boolean isExist = repo.existsById(identity);
 		if(isExist) {
@@ -64,6 +68,7 @@ public class ManufactureCatServiceImpl implements ManufactureCatService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Integer identity) {
 		repo.deleteById(identity);
 	}

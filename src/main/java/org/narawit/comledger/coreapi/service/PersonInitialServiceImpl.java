@@ -12,9 +12,11 @@ import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.narawit.comledger.coreapi.utilities.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class PersonInitialServiceImpl implements PersonInitialService {
 	private PersonInitialRepo repo;
 	
@@ -43,6 +45,7 @@ public class PersonInitialServiceImpl implements PersonInitialService {
 	}
 
 	@Override
+	@Transactional
 	public PersonInitialContract add(PersonInitialRequest req) throws ResponseStatusException {
 		if(StringUtils.isStringNotEmpty(req.initial())) {
 			if(!repo.existsByInitial(req.initial())) {
@@ -57,6 +60,7 @@ public class PersonInitialServiceImpl implements PersonInitialService {
 	}
 
 	@Override
+	@Transactional
 	public PersonInitialContract edit(Long identity, PersonInitialRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			PersonInitial persisted = repo.save(new PersonInitial(req));
@@ -66,6 +70,7 @@ public class PersonInitialServiceImpl implements PersonInitialService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Long identity) {
 		repo.deleteById(identity);
 	}

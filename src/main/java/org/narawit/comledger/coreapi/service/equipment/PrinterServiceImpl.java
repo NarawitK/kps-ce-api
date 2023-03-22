@@ -10,14 +10,17 @@ import org.narawit.comledger.coreapi.repo.equipment.PrinterRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class PrinterServiceImpl implements PrinterService{
 	private PrinterRepo repo;
 	public PrinterServiceImpl(PrinterRepo repo) {
 		this.repo = repo;
 	}
+	
 	@Override
 	public Iterable<PrinterContract> findAll() {
 		Iterable<Printer> result = repo.findAll();
@@ -26,12 +29,15 @@ public class PrinterServiceImpl implements PrinterService{
 		});
 		return contracts;
 	}
+	
 	@Override
 	public PrinterContract findById(Long identity) {
 		Optional<Printer> result = repo.findById(identity);
 		return result.isPresent() ? new PrinterContract(result.get()) : null;
 	}
+	
 	@Override
+	@Transactional
 	public PrinterContract add(PrinterRequest req) throws ResponseStatusException {
 		if(!repo.existsByEquipmentId(req.equipmentId())) {
 			return persistToDb(req);			
@@ -40,7 +46,9 @@ public class PrinterServiceImpl implements PrinterService{
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "Printer with this equipment ID already exist");
 		}
 	}
+	
 	@Override
+	@Transactional
 	public PrinterContract edit(Long identity, PrinterRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			return persistToDb(req);
@@ -49,7 +57,9 @@ public class PrinterServiceImpl implements PrinterService{
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Printer does not exist");
 		}
 	}
+	
 	@Override
+	@Transactional
 	public void remove(Long identity) {
 		repo.deleteById(identity);
 	}

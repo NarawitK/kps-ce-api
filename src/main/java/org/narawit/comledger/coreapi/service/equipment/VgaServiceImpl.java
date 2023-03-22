@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.repo.equipment.VgaRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class VgaServiceImpl implements VgaService{
 	
 	private final VgaRepo repo;
@@ -37,6 +39,7 @@ public class VgaServiceImpl implements VgaService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public VgaContract add(VgaRequest req) throws ResponseStatusException {
 		if(!repo.existsByEquipmentId(req.equipmentId())) {
 			return persistToDb(null, req);			
@@ -47,6 +50,7 @@ public class VgaServiceImpl implements VgaService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public VgaContract edit(Long identity, VgaRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity))
 			return persistToDb(identity, req);
@@ -55,6 +59,7 @@ public class VgaServiceImpl implements VgaService{
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public void remove(Long identity) {
 		repo.deleteById(identity);
 	}

@@ -12,9 +12,11 @@ import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.narawit.comledger.coreapi.utilities.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class SubDepartmentServiceImpl implements SubDepartmentService {
 	private final SubDepartmentRepo repo;
 	
@@ -43,6 +45,7 @@ public class SubDepartmentServiceImpl implements SubDepartmentService {
 	}
 
 	@Override
+	@Transactional
 	public SubDepartmentContract add(SubDepartmentRequest req) throws ResponseStatusException {
 		if(StringUtils.isStringNotEmpty(req.name())) {
 			if(!repo.existsByName(req.name())) {
@@ -61,6 +64,7 @@ public class SubDepartmentServiceImpl implements SubDepartmentService {
 	}
 
 	@Override
+	@Transactional
 	public SubDepartmentContract edit(Integer identity, SubDepartmentRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			SubDepartment persist = repo.save(new SubDepartment(identity, req));
@@ -70,6 +74,7 @@ public class SubDepartmentServiceImpl implements SubDepartmentService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Integer identity) {
 		repo.deleteById(identity);			
 	}

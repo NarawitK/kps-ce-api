@@ -11,9 +11,11 @@ import org.narawit.comledger.coreapi.repo.EquipmentLocationRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class EquipmentLocationServiceImpl implements EquipmentLocationService{
 	
 	private final EquipmentLocationRepo repo;
@@ -43,6 +45,7 @@ public class EquipmentLocationServiceImpl implements EquipmentLocationService{
 	}
 
 	@Override
+	@Transactional
 	public EquipmentLocationContract add(EquipmentLocationRequest req) throws ResponseStatusException {
 		if(!repo.existsByEquipmentId(req.equipmentId())) {
 			EquipmentLocation persisted = new EquipmentLocation(req);
@@ -54,6 +57,7 @@ public class EquipmentLocationServiceImpl implements EquipmentLocationService{
 		}
 	}
 	@Override
+	@Transactional
 	public EquipmentLocationContract edit(Long identity, EquipmentLocationRequest req) throws ResponseStatusException {
 		boolean isExist = repo.existsById(identity);
 		if(isExist) {
@@ -66,6 +70,7 @@ public class EquipmentLocationServiceImpl implements EquipmentLocationService{
 		}
 	}
 	@Override
+	@Transactional
 	public void remove(Long identity){
 		repo.deleteById(identity);
 	}

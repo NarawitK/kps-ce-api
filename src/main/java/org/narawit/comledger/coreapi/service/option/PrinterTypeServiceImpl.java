@@ -12,9 +12,11 @@ import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.narawit.comledger.coreapi.utilities.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class PrinterTypeServiceImpl implements PrinterTypeService {
 
 	private final PrinterTypeRepo repo;
@@ -42,6 +44,7 @@ public class PrinterTypeServiceImpl implements PrinterTypeService {
 		}
 
 	@Override
+	@Transactional
 	public PrinterTypeContract add(PrinterTypeRequest req) throws ResponseStatusException {
 		String printerType = req.type();
 		if(StringUtils.isStringNotEmpty(printerType)) {
@@ -59,6 +62,7 @@ public class PrinterTypeServiceImpl implements PrinterTypeService {
 	}
 
 	@Override
+	@Transactional
 	public PrinterTypeContract edit(Integer identity, PrinterTypeRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			PrinterType persisted = repo.save(new PrinterType(identity, req));
@@ -70,6 +74,7 @@ public class PrinterTypeServiceImpl implements PrinterTypeService {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Integer identity) {
 		repo.deleteById(identity);
 	}

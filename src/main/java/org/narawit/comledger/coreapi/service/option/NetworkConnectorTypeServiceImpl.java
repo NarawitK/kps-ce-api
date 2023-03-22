@@ -10,9 +10,11 @@ import org.narawit.comledger.coreapi.service.common.ServiceCommon;
 import org.narawit.comledger.coreapi.utilities.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
+@Transactional(readOnly = true)
 public class NetworkConnectorTypeServiceImpl implements NetworkConnectorTypeService {
 	
 	private final NetworkConnectorTypeRepo repo;
@@ -40,6 +42,7 @@ public class NetworkConnectorTypeServiceImpl implements NetworkConnectorTypeServ
 	}
 
 	@Override
+	@Transactional
 	public NetworkConnectorTypeContract add(NetworkConnectorTypeRequest req) throws ResponseStatusException {
 		String connector = req.connector();
 		if(StringUtils.isStringNotEmpty(connector)) {
@@ -57,6 +60,7 @@ public class NetworkConnectorTypeServiceImpl implements NetworkConnectorTypeServ
 	}
 
 	@Override
+	@Transactional
 	public NetworkConnectorTypeContract edit(Integer identity, NetworkConnectorTypeRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
 			NetworkConnectorType persisted = repo.save(new NetworkConnectorType(identity, req));
@@ -68,6 +72,7 @@ public class NetworkConnectorTypeServiceImpl implements NetworkConnectorTypeServ
 	}
 
 	@Override
+	@Transactional
 	public void remove(Integer identity) {
 		repo.deleteById(identity);
 	}
