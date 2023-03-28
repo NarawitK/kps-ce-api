@@ -9,5 +9,4 @@ public class ComputerLedgerCoreApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ComputerLedgerCoreApiApplication.class, args);
 	}
-
 }

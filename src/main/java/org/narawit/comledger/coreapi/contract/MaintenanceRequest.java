@@ -1,20 +1,21 @@
 package org.narawit.comledger.coreapi.contract;
 
+import static org.narawit.comledger.coreapi.constant.MessageConstants.NOT_BLANK_VALIDATION_MSG;
 import java.time.ZonedDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record MaintenanceRequest(
-		@NotBlank
+		@NotNull(message = "Equipment" + NOT_BLANK_VALIDATION_MSG)
 		Long equipmentId,
-		@NotBlank
+		@NotBlank(message = "Maintenance Detail" + NOT_BLANK_VALIDATION_MSG)
 		String detail,
-		@NotBlank
+		@NotBlank(message = "Maintenance Creation Date" + NOT_BLANK_VALIDATION_MSG)
 		ZonedDateTime createAt,
-		@NotNull
 		boolean done,
+		@NotNull(message = "Task Done" + NOT_BLANK_VALIDATION_MSG)
 		ZonedDateTime doneDate,
-		@NotBlank
+		@NotNull(message = "User" + NOT_BLANK_VALIDATION_MSG)
 		Long userId
 		) {}

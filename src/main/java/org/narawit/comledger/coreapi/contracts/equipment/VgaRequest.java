@@ -1,15 +1,16 @@
 package org.narawit.comledger.coreapi.contracts.equipment;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record VgaRequest(
-		@NotBlank 
+		@NotNull(message = "Equipment must be specify")
 		Long equipmentId,
-		@NotBlank
+		@NotNull(message = "Manufacture must be specify.")
 		Integer manufactureId, 
-		@NotBlank
+		@NotBlank(message = "Model cannot be empty.")
 		String model, 
-		@NotBlank
+		@NotNull(message = "Memory Size must be specify.")
 		Double memory, 
-		@NotBlank
+		@NotNull(message = "Memory Unit must be specify.")
 		Integer memoryUnitId) {}

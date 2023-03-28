@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,22 +24,30 @@ public class Department {
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
 	@Column(length = 150, nullable = false)
 	private String name;
+	
 	@Column(name = "active", columnDefinition = "boolean DEFAULT true", nullable = false)
 	private boolean active;
 	
 	// Foreign Key in Other Entities
 	@OneToMany(mappedBy = "department")
 	private Set<EquipmentLocation>  equipmentLocations;
+	
 	@OneToMany(mappedBy = "department")
 	private Set<SubDepartment> subDepartments;
 	
+	@OneToOne(mappedBy = "user")
+	private RefreshToken refreshToken;
+	
 	public Department() {}
+	
 	public Department(DepartmentRequest req) {
 		this.name = req.name();
 		this.active = req.active();
 	}
+	
 	public Department(Integer id, DepartmentRequest req) {
 		this.id = id;
 		this.name = req.name();

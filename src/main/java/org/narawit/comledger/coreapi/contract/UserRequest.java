@@ -1,20 +1,23 @@
 package org.narawit.comledger.coreapi.contract;
 
+import static org.narawit.comledger.coreapi.constant.MessageConstants.NOT_BLANK_VALIDATION_MSG;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+// TODO: To All Request Contract, Please Implement Valid Request Validation like this one.
 public record UserRequest(
-		@NotBlank
+		@NotNull(message = "Intitial" + NOT_BLANK_VALIDATION_MSG)
 		Long initialId,
-		@NotBlank
+		@NotBlank(message = "User Role" + NOT_BLANK_VALIDATION_MSG)
+		String role,
+		@NotBlank(message = "First Name" + NOT_BLANK_VALIDATION_MSG)
 		String firstname,
-		@NotBlank
+		@NotBlank(message = "Last Name" + NOT_BLANK_VALIDATION_MSG)
 		String lastname, 
-		@NotBlank
+		@NotBlank(message = "Email" + NOT_BLANK_VALIDATION_MSG)
 		String email, 
-		@NotBlank
+		@NotBlank(message = "Username" + NOT_BLANK_VALIDATION_MSG)
 		String username,
-		@NotBlank
 		String password,
-		@NotBlank
-		Boolean active) {
-}
+		@NotNull(message = "Activation state" + NOT_BLANK_VALIDATION_MSG)
+		Boolean active) {}

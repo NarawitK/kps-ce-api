@@ -63,7 +63,7 @@ public class PersonInitialServiceImpl implements PersonInitialService {
 	@Transactional
 	public PersonInitialContract edit(Long identity, PersonInitialRequest req) throws ResponseStatusException {
 		if(repo.existsById(identity)) {
-			PersonInitial persisted = repo.save(new PersonInitial(req));
+			PersonInitial persisted = repo.save(new PersonInitial(identity, req));
 			return new PersonInitialContract(persisted);
 		}
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Initial is not exist");

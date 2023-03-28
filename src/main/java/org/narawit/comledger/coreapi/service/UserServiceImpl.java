@@ -8,7 +8,9 @@ import org.narawit.comledger.coreapi.contract.UserRequest;
 import org.narawit.comledger.coreapi.domain.User;
 import org.narawit.comledger.coreapi.repo.UserRepo;
 import org.narawit.comledger.coreapi.service.common.ServiceCommon;
+import org.narawit.comledger.coreapi.utilities.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,9 +20,11 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserServiceImpl implements UserService{
 	
 	private final UserRepo repo;
+	private final PasswordEncoder passwordEncoder;
 	
-	public UserServiceImpl(UserRepo repo) {
+	public UserServiceImpl(UserRepo repo, PasswordEncoder passwordEncoder) {
 		this.repo = repo;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -41,10 +45,31 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	public User findByUsername(String username) {
+		Optional<User> user = repo.findByUsername(username);
+		return user.isPresent() ? user.get() : null;
+	}
+	
+	@Override
 	@Transactional
 	public UserContract add(UserRequest req) throws ResponseStatusException {
-		if(!repo.existsByEmail(req.email())) {
-			return persistToDb(null, req);
+		if(!repo.existsByEmail(req.username())) {
+			User user = new User(req);
+			user.setPassword(passwordEncoder.encode(req.password()));
+			return new UserContract(repo.save(user));
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "User with this email already exist");
+		}
+	}
+	
+	@Override
+	@Transactional
+	public User addThenReturnEntity(UserRequest req) throws ResponseStatusException {
+		if(!repo.existsByEmail(req.username())) {
+			User user = new User(req);
+			user.setPassword(passwordEncoder.encode(req.password()));
+			return repo.save(user);
 		}
 		else {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "User with this email already exist");
@@ -54,27 +79,28 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional
 	public UserContract edit(Long identity, UserRequest req) throws ResponseStatusException {
-		if(repo.existsById(identity)) {
-			User persisted = repo.save(new User(identity, req));
-			return new UserContract(persisted);
+		Optional<User> result = repo.findById(identity);
+		if(result.isPresent()) {
+			User user = result.get();
+			User persisted = new User(identity, req);
+			// User provided new Password in Front-end
+			if(StringUtils.isStringNotEmpty(req.password())) {
+				persisted.setPassword(passwordEncoder.encode(req.password()));
+			}
+			// User didn't change their password in Front-end
+			else {
+				persisted.setPassword(user.getPassword());
+			}
+			return new UserContract(repo.save(persisted));
 		}
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not exist");
+		else {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User does not exist");
+		}
 	}
 
 	@Override
 	@Transactional
 	public void remove(Long identity) {
 		repo.deleteById(identity);
-	}
-	
-	private UserContract persistToDb(Long id, UserRequest req) {
-		UserContract contract = null;
-		if(id != null) {
-			contract = new UserContract(repo.save(new User(id, req)));
-		}
-		else {
-			contract = new UserContract(repo.save(new User(req)));
-		}
-		return contract;
 	}
 }

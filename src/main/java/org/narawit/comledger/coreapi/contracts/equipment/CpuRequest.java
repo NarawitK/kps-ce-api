@@ -1,16 +1,18 @@
 package org.narawit.comledger.coreapi.contracts.equipment;
 
+import static org.narawit.comledger.coreapi.constant.MessageConstants.NOT_BLANK_VALIDATION_MSG;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record CpuRequest(
-		@NotBlank
+		@NotNull(message = "CPU Manufacture" + NOT_BLANK_VALIDATION_MSG)
 		Integer manufactureId,
-		@NotBlank
+		@NotBlank(message = "CPU Model" + NOT_BLANK_VALIDATION_MSG)
 		String model,
-		@NotBlank
+		@NotNull(message = "CPU Thread" + NOT_BLANK_VALIDATION_MSG)
 		Short threadCount,
-		@NotBlank
+		@NotNull(message = "CPU Clock Speed" + NOT_BLANK_VALIDATION_MSG)
 		Double clockSpeed,
-		@NotBlank
+		@NotNull(message = "Clock Speed Unit" + NOT_BLANK_VALIDATION_MSG)
 		Integer clockSpeedUnitId) {
 }

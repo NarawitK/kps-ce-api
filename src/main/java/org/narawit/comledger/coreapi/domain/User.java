@@ -1,17 +1,24 @@
 package org.narawit.comledger.coreapi.domain;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.narawit.comledger.coreapi.contract.UserRequest;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,12 +38,16 @@ uniqueConstraints = {
 		@UniqueConstraint(columnNames = "email", name = "user_email_unique"),
 		@UniqueConstraint(columnNames = "username", name = "username_unique")
 })
-public class User {
+public class User implements UserDetails {
+	private static final long serialVersionUID = 8471761078834387705L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
 	private Long id;
-	@ManyToOne
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role;
+	@OneToOne
 	@JoinColumn(name = "initial_id", nullable = false)
 	private PersonInitial initial;
 	@Column(length = 40, nullable = false)
@@ -66,6 +77,7 @@ public class User {
 	
 	public User(UserRequest req) {
 		this.initial = new PersonInitial(req.initialId());
+		this.role = Role.valueOf(req.role());
 		this.firstname = req.firstname();
 		this.lastname = req.lastname();
 		this.email = req.email();
@@ -75,14 +87,8 @@ public class User {
 	}
 	
 	public User(Long id, UserRequest req) {
+		this(req);
 		this.id = id;
-		this.initial = new PersonInitial(req.initialId());
-		this.firstname = req.firstname();
-		this.lastname = req.lastname();
-		this.email = req.email();
-		this.username = req.username();
-		this.password = req.password();
-		this.active = req.active();
 	}
 
 	public Long getId() {
@@ -91,6 +97,15 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	public PersonInitial getInitial() {
@@ -125,6 +140,7 @@ public class User {
 		this.email = email;
 	}
 	
+	@Override
 	public String getUsername() {
 		return this.username;
 	}
@@ -133,6 +149,7 @@ public class User {
 		this.username = username;
 	}
 
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -155,5 +172,30 @@ public class User {
 
 	public void setActive(boolean isActive) {
 		this.active = isActive;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return this.getActive();
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return this.getActive();
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return this.getActive();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.getActive();
 	}
 }

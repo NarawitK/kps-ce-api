@@ -1,6 +1,5 @@
 package org.narawit.comledger.coreapi.domain;
 
-import java.util.Set;
 
 import org.narawit.comledger.coreapi.contract.PersonInitialRequest;
 
@@ -11,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -25,8 +24,8 @@ public class PersonInitial {
 	private String initial;
 	
 	// Reference Key in other tables
-	@OneToMany(mappedBy = "initial", fetch = FetchType.LAZY)
-	private Set<User> users;
+	@OneToOne(mappedBy = "initial", fetch = FetchType.LAZY)
+	private User user;
 	
 	public PersonInitial() {}
 	
@@ -56,10 +55,10 @@ public class PersonInitial {
 	public void setInitial(String initial) {
 		this.initial = initial;
 	}
-	public Set<User> getUsers(){
-		return this.users;
+	public User getUsers(){
+		return this.user;
 	}
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setUsers(User user) {
+		this.user = user;
 	}
 }
