@@ -25,9 +25,10 @@ public class EventLog {
 	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "log_date", 
+	@Column(name = "log_date",
 			columnDefinition = "timestamp with time zone DEFAULT NOW()", 
-			nullable = false)
+			nullable = false,
+			updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private ZonedDateTime logDate;
 	@Column(length = 10, nullable = false)

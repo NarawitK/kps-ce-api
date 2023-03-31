@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 public record EquipmentLocationRequest(
 		@NotBlank(message = "Associate Department" + NOT_BLANK_VALIDATION_MSG)
 		Integer deptId,
+		@NotBlank(message = "Sub Department" + NOT_BLANK_VALIDATION_MSG)
 		Integer subDeptId,
 		@NotNull(message = "Associate Equipment" + NOT_BLANK_VALIDATION_MSG)
 		Long equipmentId,

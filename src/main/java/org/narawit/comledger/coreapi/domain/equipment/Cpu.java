@@ -23,6 +23,8 @@ public class Cpu {
 	private Long id;
 	@Column(length =  30, nullable = false)
 	private String model;
+	@Column(name = "core_count")
+	private Short coreCount;
 	@Column(name = "thread_count")
 	private Short threadCount;
 	@Column(name = "clock_speed")
@@ -48,18 +50,15 @@ public class Cpu {
 	public Cpu(CpuRequest req) {
 		this.manufacture = new Manufacture(req.manufactureId());
 		this.model = req.model();
+		this.coreCount = req.coreCount();
 		this.threadCount = req.threadCount();
 		this.clockSpeed = req.clockSpeed();
 		this.clockSpeedUnit = new Unit(req.clockSpeedUnitId());
 	}
 	
 	public Cpu(Long id, CpuRequest req) {
+		this(req);
 		this.id = id;
-		this.manufacture = new Manufacture(req.manufactureId());
-		this.model = req.model();
-		this.threadCount = req.threadCount();
-		this.clockSpeed = req.clockSpeed();
-		this.clockSpeedUnit = new Unit(req.clockSpeedUnitId());
 	}
 	
 	public Long getId() {
@@ -79,6 +78,13 @@ public class Cpu {
 	}
 	public void setModel(String model) {
 		this.model = model;
+	}
+	public Short getCoreCount() {
+		return coreCount;
+	}
+
+	public void setCoreCount(Short coreCount) {
+		this.coreCount = coreCount;
 	}
 	public Short getThreadCount() {
 		return threadCount;

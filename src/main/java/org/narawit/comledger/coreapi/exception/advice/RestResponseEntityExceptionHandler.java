@@ -19,7 +19,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler {
-	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	@ExceptionHandler(value = RefreshTokenException.class)
 	public BaseResponse<ZonedDateTime> handleTokenRefreshException(RefreshTokenException ex, WebRequest request) {
 		return new BaseResponse<ZonedDateTime>(false, ex.getMessage(), ZonedDateTime.now());

@@ -4,7 +4,6 @@ import static org.narawit.comledger.coreapi.constant.MessageConstants.NOT_BLANK_
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-// TODO: To All Request Contract, Please Implement Valid Request Validation like this one.
 public record UserRequest(
 		@NotNull(message = "Intitial" + NOT_BLANK_VALIDATION_MSG)
 		Long initialId,

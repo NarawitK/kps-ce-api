@@ -40,9 +40,12 @@ public class Equipment {
 	private boolean active;
 	@Column(name = "import_date")
 	private ZonedDateTime importDate;
-	@Column(name = "register_date", columnDefinition = "timestamp with time zone DEFAULT NOW()", nullable = false)
+	@Column(name = "register_date", columnDefinition = "timestamp with time zone DEFAULT CURRENT_TIMESTAMP", nullable = false)
 	private ZonedDateTime registerDate;
-	@Column(name = "update_date", columnDefinition = "timestamp with time zone DEFAULT NOW()", nullable = false)
+	@Column(name = "update_date",
+			updatable = false,
+			columnDefinition = "timestamp with time zone DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP", 
+			nullable = false)
 	private ZonedDateTime updateDate;
 	
 	// Foreign Key Declaration

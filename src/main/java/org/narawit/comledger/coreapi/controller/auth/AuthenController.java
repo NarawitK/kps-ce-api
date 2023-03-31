@@ -1,5 +1,6 @@
 package org.narawit.comledger.coreapi.controller.auth;
 
+import static org.narawit.comledger.coreapi.constant.ExceptionMessageConstants.REFRESH_TOKEN_NOT_EXISTED_MSG;
 import org.narawit.comledger.coreapi.contract.UserRequest;
 import org.narawit.comledger.coreapi.contract.auth.AuthenticationContract;
 import org.narawit.comledger.coreapi.contract.auth.AuthenticationRequest;
@@ -24,8 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 
-// TODO: Add @Valid to every controller method that accept request body.
-
 @RestController
 @RequestMapping("/auth")
 public class AuthenController {	
@@ -41,9 +40,8 @@ public class AuthenController {
 		this.authManager = authManager;
 	}
 	
-	@PostMapping
+	@PostMapping("/login")
 	public ResponseEntity<AuthenticationContract> getAccessTokenWithRefreshToken(@Valid @RequestBody AuthenticationRequest req) {
-		// TODO: Caught All Authentication Exception then make a proper response.
 		try {
 			authManager.authenticate(new UsernamePasswordAuthenticationToken(req.username(), req.password()));
 			User user = userService.findByUsername(req.username());
@@ -73,7 +71,7 @@ public class AuthenController {
 				.map(user -> {
 					String token = jwtService.generateToken(null, user);
 					return new ResponseEntity<RefreshTokenContract>(new RefreshTokenContract(token, requestRefreshToken), HttpStatus.CREATED);
-				}).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, "Refresh Token not exist in server"));
+				}).orElseThrow(() -> new RefreshTokenException(requestRefreshToken, REFRESH_TOKEN_NOT_EXISTED_MSG));
 	}
 	
 	@PostMapping("/logout")

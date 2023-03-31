@@ -6,6 +6,7 @@ import org.narawit.comledger.coreapi.contract.option.UnitTypeRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,7 +25,7 @@ public class UnitType {
 	private String type;
 	
 	// Referenced Key
-	@OneToMany(mappedBy = "unitType")
+	@OneToMany(mappedBy = "unitType", fetch = FetchType.LAZY)
 	private Set<Unit> units;
 
 	public UnitType() {}

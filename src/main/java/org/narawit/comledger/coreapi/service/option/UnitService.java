@@ -5,5 +5,5 @@ import org.narawit.comledger.coreapi.contract.option.UnitRequest;
 import org.narawit.comledger.coreapi.service.common.BaseService;
 
 public interface UnitService extends BaseService<UnitContract, UnitRequest, Integer> {
-
+	public Iterable<UnitContract> findByUnitType(String type);
 }

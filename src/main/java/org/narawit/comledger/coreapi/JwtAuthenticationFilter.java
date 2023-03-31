@@ -2,7 +2,11 @@ package org.narawit.comledger.coreapi;
 
 import java.io.IOException;
 
+import static org.narawit.comledger.coreapi.constant.ExceptionMessageConstants.ACCESS_TOKEN_INVALID_MSG;
+import static org.narawit.comledger.coreapi.constant.ExceptionMessageConstants.ACCESS_TOKEN_EXPIRED_OR_INVALID_MSG;
+import org.narawit.comledger.coreapi.exception.AccessTokenExpiredException;
 import org.narawit.comledger.coreapi.service.token.JwtTokenService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,17 +40,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter  {
 			return;
 		}
 		
-		final String jwt = authHeader.substring(7);
-		final String credential = jwtService.extractClaim(jwt, Claims::getAudience);
-		
-		if(credential != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = this.userService.loadUserByUsername(credential);
-			if(jwtService.isTokenValid(jwt, userDetails)) {
-				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				SecurityContextHolder.getContext().setAuthentication(authToken);
+		try {
+			final String jwt = authHeader.substring(7);
+			final String credential = jwtService.extractClaim(jwt, Claims::getAudience);
+			
+			if(credential != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserDetails userDetails = this.userService.loadUserByUsername(credential);
+				if(jwtService.isTokenValid(jwt, userDetails)) {
+					UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					SecurityContextHolder.getContext().setAuthentication(authToken);
+				}
+				else {
+					throw new AccessTokenExpiredException(HttpStatus.UNAUTHORIZED, ACCESS_TOKEN_INVALID_MSG);
+				}
+			}
+			else {
+				throw new AccessTokenExpiredException(HttpStatus.UNAUTHORIZED, ACCESS_TOKEN_EXPIRED_OR_INVALID_MSG);
 			}
 		}
-		filterChain.doFilter(request, response);
+		catch (AccessTokenExpiredException e) {
+			response.setContentType("application/json");
+			response.setStatus(e.getStatusCode().value());
+			response.getWriter().write(e.getMessage());
+		}
+		finally {
+			filterChain.doFilter(request, response);
+		}
 	}
 }

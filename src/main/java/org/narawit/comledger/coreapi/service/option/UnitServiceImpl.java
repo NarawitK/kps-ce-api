@@ -27,11 +27,9 @@ public class UnitServiceImpl implements UnitService{
 	public Iterable<UnitContract> findAll() {
 		Iterable<Unit> rs = repo.findAll();
 		List<UnitContract> contracts = new ArrayList<>();
-		if(ServiceCommon.IsIterableHasElements(rs)) {
-			for(Unit u : rs) {
-				contracts.add(new UnitContract(u));
-			}
-		}
+		contracts = ServiceCommon.AddEntityToContractCollection(rs, e -> {
+			return new UnitContract(e);
+		});
 		return contracts;
 	}
 
@@ -42,6 +40,16 @@ public class UnitServiceImpl implements UnitService{
 			return new UnitContract(result.get());
 		}
 		return null;
+	}
+	
+	@Override
+	public Iterable<UnitContract> findByUnitType(String type) {
+		Iterable<Unit> rs = repo.findByUnitTypeType(type);
+		List<UnitContract> contracts = new ArrayList<>();
+		contracts = ServiceCommon.AddEntityToContractCollection(rs, e -> {
+			return new UnitContract(e);
+		});
+		return contracts;
 	}
 
 	@Override

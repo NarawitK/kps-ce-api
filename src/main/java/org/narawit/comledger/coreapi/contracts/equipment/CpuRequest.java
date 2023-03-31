@@ -9,10 +9,8 @@ public record CpuRequest(
 		Integer manufactureId,
 		@NotBlank(message = "CPU Model" + NOT_BLANK_VALIDATION_MSG)
 		String model,
-		@NotNull(message = "CPU Thread" + NOT_BLANK_VALIDATION_MSG)
+		Short coreCount,
 		Short threadCount,
-		@NotNull(message = "CPU Clock Speed" + NOT_BLANK_VALIDATION_MSG)
 		Double clockSpeed,
-		@NotNull(message = "Clock Speed Unit" + NOT_BLANK_VALIDATION_MSG)
 		Integer clockSpeedUnitId) {
 }

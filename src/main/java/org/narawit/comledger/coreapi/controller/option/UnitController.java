@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,14 +32,18 @@ public class UnitController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<BaseResponse<Iterable<UnitContract>>> getAll(){
-		return ControllerHelper.getOkResponseEntity(FETCH_SUCCESSFULLY, svc.findAll());
+	public ResponseEntity<BaseResponse<Iterable<UnitContract>>> getAll(@RequestParam(name = "findby", required = false) String type){
+		if(type != null)
+			return ControllerHelper.getOkResponseEntity(FETCH_SUCCESSFULLY, svc.findByUnitType(type));
+		else
+			return ControllerHelper.getOkResponseEntity(FETCH_SUCCESSFULLY, svc.findAll());
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<BaseResponse<UnitContract>> getById(@PathVariable Integer id){
 		return ControllerHelper.getOkResponseEntity(FETCH_SUCCESSFULLY, svc.findById(id));
 	}
+	
 	
 	@PostMapping("/add")
 	public ResponseEntity<BaseResponse<UnitContract>> add(@Valid @RequestBody UnitRequest req){
